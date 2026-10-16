@@ -1,0 +1,40 @@
+---
+import ImageBlock from './ImageBlock.astro';
+import type { ImageBlock as ImageBlockValue } from '../../dist/index.js';
+
+interface Props {
+	node: { images: ImageBlockValue[]; columns?: number };
+	sizes?: string;
+}
+
+const { node, sizes } = Astro.props;
+
+const columns = node.columns ?? 3;
+
+if (!Number.isInteger(columns) || columns < 1 || columns > 12) {
+	throw new Error('Gallery columns must be between 1 and 12.');
+}
+
+const imageSizes = sizes ?? `(max-width: 640px) 50vw, ${100 / columns}vw`;
+---
+
+<div class="smallpics-gallery" style={`--columns:${columns}`}>
+	{node.images.map((image) => (
+		<ImageBlock node={image} sizes={imageSizes} />
+	))}
+</div>
+<style>
+	.smallpics-gallery {
+		display: grid;
+		grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+		gap: 1rem;
+	}
+	.smallpics-gallery :global(figure) {
+		margin: 0;
+	}
+	@media (max-width: 640px) {
+		.smallpics-gallery {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+</style>

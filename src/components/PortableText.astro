@@ -1,0 +1,18 @@
+---
+import { PortableText } from 'emdash/ui';
+import type { ComponentProps } from 'astro/types';
+import ImageBlock from './ImageBlock.astro';
+import Gallery from './Gallery.astro';
+
+type Props = ComponentProps<typeof PortableText>;
+
+const { components, ...props } = Astro.props;
+---
+
+<PortableText
+	{...props}
+	components={{
+		...components,
+		type: { image: ImageBlock, gallery: Gallery, ...components?.type },
+	}}
+/>

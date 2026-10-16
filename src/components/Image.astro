@@ -1,0 +1,141 @@
+---
+import { getImage } from 'astro:assets';
+import type { HTMLAttributes } from 'astro/types';
+import {
+	resolveImage,
+	type MediaValue,
+	type TransformOptions,
+} from '../../dist/index.js';
+
+interface Props extends Omit<
+	HTMLAttributes<'img'>,
+	'src' | 'srcset' | 'width' | 'height'
+> {
+	image: MediaValue | string | null | undefined;
+	darkVariant?: MediaValue | string | null;
+	width?: number;
+	height?: number;
+	widths?: number[];
+	source?: string;
+	fit?: 'cover' | 'contain' | 'fill' | 'inside' | 'outside';
+	format?: 'avif' | 'webp' | 'jpg' | 'png' | 'gif';
+	quality?: number;
+	smallpics?: TransformOptions;
+	priority?: boolean;
+}
+
+const {
+	image,
+	darkVariant,
+	width,
+	height,
+	widths,
+	source,
+	fit,
+	format,
+	quality,
+	smallpics,
+	priority = false,
+	alt,
+	sizes,
+	class: className,
+	id,
+	...attrs
+} = Astro.props;
+
+const dark =
+	darkVariant ?? (typeof image === 'object' ? image?.darkVariant : undefined);
+
+const variants = image
+	? [{ image, dark: false }, ...(dark ? [{ image: dark, dark: true }] : [])]
+	: [];
+
+const resolved = await Promise.all(
+	variants.map(async (variant) => {
+		const media = resolveImage(variant.image, {
+			width,
+			height,
+			alt: alt ?? undefined,
+			fit,
+			smallpics,
+		});
+
+		if (!media.width || !media.height) {
+			throw new Error(
+				'Small Pics images need width and height, supplied by EmDash or component props.',
+			);
+		}
+
+		const originalWidth =
+			typeof variant.image === 'object' ? variant.image.width : undefined;
+
+		const cap = Math.min(media.width * 2, originalWidth ?? Infinity);
+
+		const responsiveWidths =
+			widths ??
+			[
+				...new Set(
+					[
+						320,
+						640,
+						960,
+						1280,
+						1600,
+						1920,
+						Math.min(media.width, cap),
+						cap,
+					].filter((value) => value > 0 && value <= cap),
+				),
+			].sort((a, b) => a - b);
+
+		const result = await getImage({
+			...media,
+			fit,
+			format,
+			quality,
+			source,
+			widths: responsiveWidths,
+		});
+
+		return { ...variant, media, result };
+	}),
+);
+---
+
+{resolved.map(({ dark: darkImage, media, result }) => (
+	<img
+		{...attrs}
+		src={result.src}
+		srcset={result.srcSet.attribute}
+		sizes={sizes ?? `(min-width: ${media.width}px) ${media.width}px, 100vw`}
+		width={media.width}
+		height={media.height}
+		alt={media.alt}
+		id={darkImage && id ? `${id}--dark` : id}
+		class:list={[
+			className,
+			dark && (darkImage ? 'smallpics-dark' : 'smallpics-light'),
+		]}
+		loading={attrs.loading ?? (priority ? 'eager' : 'lazy')}
+		decoding={attrs.decoding ?? 'async'}
+		fetchpriority={attrs.fetchpriority ?? (priority ? 'high' : undefined)}
+	/>
+))}
+<style is:global>
+	:where(:root.dark) .smallpics-light {
+		display: none;
+	}
+	:where(:root.light) .smallpics-dark {
+		display: none;
+	}
+	@media (prefers-color-scheme: dark) {
+		:where(:root:not(.light)) .smallpics-light {
+			display: none;
+		}
+	}
+	@media (prefers-color-scheme: light) {
+		:where(:root:not(.dark)) .smallpics-dark {
+			display: none;
+		}
+	}
+</style>
