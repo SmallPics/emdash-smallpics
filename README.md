@@ -5,7 +5,7 @@ Add [Small Pics](https://www.smallpics.io) image CDN and transforms to EmDash.
 ## Installation
 
 ```sh
-npm install emdash-smallpics
+npm install @smallpics/emdash
 ```
 
 ## Configuration
@@ -39,7 +39,7 @@ For signing or SVG settings, use an entry in `sources`, even with a single origi
 
 ```js
 import { defineConfig } from 'astro/config';
-import smallpics from 'emdash-smallpics';
+import smallpics from '@smallpics/emdash';
 
 export default defineConfig({
 	integrations: [
@@ -65,7 +65,7 @@ See an example of selecting a source in [Select a Source](#select-a-source) belo
 
 ```js
 import { defineConfig } from 'astro/config';
-import smallpics from 'emdash-smallpics';
+import smallpics from '@smallpics/emdash';
 
 export default defineConfig({
 	integrations: [
@@ -109,7 +109,7 @@ import cloudflare from '@astrojs/cloudflare';
 import react from '@astrojs/react';
 import emdash from 'emdash/astro';
 import { d1, r2 } from '@emdash-cms/cloudflare';
-import smallpics, { mediaStorageOptions } from 'emdash-smallpics';
+import smallpics, { mediaStorageOptions } from '@smallpics/emdash';
 
 const baseUrl = 'https://media.smallpics.io';
 
@@ -160,7 +160,7 @@ The URL examples below assume the source has no default transform parameters.
 
 ```astro
 ---
-import Image from 'emdash-smallpics/Image';
+import Image from '@smallpics/emdash/Image';
 const { post } = Astro.props;
 ---
 
@@ -186,7 +186,7 @@ Select a source with `source`.
 
 ```astro
 ---
-import Image from 'emdash-smallpics/Image';
+import Image from '@smallpics/emdash/Image';
 const { post } = Astro.props;
 ---
 
@@ -207,7 +207,7 @@ For format selection, see the note in [Transform Options](#transform-options).[^
 
 ```astro
 ---
-import Image from 'emdash-smallpics/Image';
+import Image from '@smallpics/emdash/Image';
 const { post } = Astro.props;
 ---
 
@@ -226,7 +226,7 @@ Pass `widths` to generate responsive image variants.
 
 ```astro
 ---
-import Image from 'emdash-smallpics/Image';
+import Image from '@smallpics/emdash/Image';
 const { post } = Astro.props;
 ---
 
@@ -253,7 +253,7 @@ The component also supplies a fallback `src`.
 
 ```astro
 ---
-import PortableText from 'emdash-smallpics/PortableText';
+import PortableText from '@smallpics/emdash/PortableText';
 const { post } = Astro.props;
 ---
 
@@ -266,7 +266,7 @@ The wrapper supplies image and gallery renderers. Custom `components.type` entri
 
 All the transform options supported by the Small Pics transform API are supported by this integration. Take a look at the [Small Pics docs](https://www.smallpics.io/docs/) for more detailed information about each parameter.
 
-Transform options can use either the Small Pics URL param key or the option name used by `smallpics-js`. For example, `q` and `quality` are equivalent.
+Transform options can use either the Small Pics URL param key or the option name used by `@smallpics/smallpics-js`. For example, `q` and `quality` are equivalent.
 
 Pass these options through `smallpics` on an image or through global and source `defaultParams`.
 

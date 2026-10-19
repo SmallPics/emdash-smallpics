@@ -2,7 +2,7 @@ import smallpics, {
 	resolveImage,
 	type MediaValue,
 	type SmallPicsConfig,
-} from 'emdash-smallpics';
+} from '@smallpics/emdash';
 import type { AstroIntegration } from 'astro';
 
 const image: MediaValue = {
@@ -27,5 +27,5 @@ void integration;
 
 void src;
 
-const trimMode: import('emdash-smallpics').TrimMode = 'either';
+const trimMode: import('@smallpics/emdash').TrimMode = 'either';
 void trimMode;

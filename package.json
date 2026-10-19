@@ -1,9 +1,12 @@
 {
-	"name": "emdash-smallpics",
+	"name": "@smallpics/emdash",
 	"version": "0.1.0",
 	"description": "Small Pics image delivery for EmDash",
 	"type": "module",
 	"license": "MIT",
+	"publishConfig": {
+		"access": "public"
+	},
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/SmallPics/emdash-smallpics.git"
@@ -54,6 +57,6 @@
 		"emdash": "^1.2.0"
 	},
 	"dependencies": {
-		"astro-smallpics": "^0.1"
+		"@smallpics/astro": "^0.1"
 	}
 }

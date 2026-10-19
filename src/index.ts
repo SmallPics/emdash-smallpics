@@ -1,12 +1,12 @@
-import smallpics, { type TransformOptions } from 'astro-smallpics';
+import smallpics, { type TransformOptions } from '@smallpics/astro';
 
-export { default } from 'astro-smallpics';
+export { default } from '@smallpics/astro';
 
 export type {
 	SmallPicsConfig,
 	TransformOptions,
 	TrimMode,
-} from 'astro-smallpics';
+} from '@smallpics/astro';
 
 /** Structural subset of EmDash media values; accepts both fields and seeded media. */
 export interface MediaValue {
