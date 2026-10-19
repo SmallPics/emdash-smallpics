@@ -1,6 +1,6 @@
 {
 	"name": "emdash-smallpics",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Small Pics image delivery for EmDash",
 	"type": "module",
 	"license": "MIT",
@@ -54,6 +54,6 @@
 		"emdash": "^1.2.0"
 	},
 	"dependencies": {
-		"astro-smallpics": "file:../astro-smallpics"
+		"astro-smallpics": "^0.1"
 	}
 }
